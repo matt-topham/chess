@@ -56,13 +56,23 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
         if (piece.getPieceType() == PieceType.BISHOP) {
-            return bishop.getBishopMoves(board, curPosition, pieceColor);
+            return bishop.getBishopMoves(board, myPosition, pieceColor);
         }
-        if (piece.getPieceType() == PieceType.QUEEN) {
-            return Queen.
+        else if (piece.getPieceType() == PieceType.QUEEN) {
+            return queen.getQueenMoves(board, myPosition, pieceColor);
+        }
+        else if (piece.getPieceType() == PieceType.KING) {
+            return king.getKingMoves(board, myPosition, pieceColor);
+        }
+        else if (piece.getPieceType() == PieceType.ROOK) {
+            return rook.getRookMoves(board, myPosition, pieceColor);
+        }
+        else if (piece.getPieceType() == PieceType.KNIGHT) {
+            return knight.getKnightMoves(board, myPosition, pieceColor);
         }
         /**
          * come back to this
          */
+        return bishop.getBishopMoves(board, myPosition, pieceColor);
     }
 }
