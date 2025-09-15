@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import chess.pieces.*;
 
@@ -45,6 +46,21 @@ public class ChessPiece {
     public PieceType getPieceType(){
         return type;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessPiece other)) return false;
+        return pieceColor == other.pieceColor && type == other.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int h = 17;
+        h = 31 * h + pieceColor.hashCode();
+        h = 31 * h + type.hashCode();
+        return h;
+    }
+
 
     /**
      * Calculates all the positions a chess piece can move to
@@ -70,9 +86,12 @@ public class ChessPiece {
         else if (piece.getPieceType() == PieceType.KNIGHT) {
             return knight.getKnightMoves(board, myPosition, pieceColor);
         }
+        else if (piece.getPieceType() == PieceType.PAWN) {
+            return pawn.getPawnMoves(board, myPosition, pieceColor);
+        }
         /**
          * come back to this
          */
-        return bishop.getBishopMoves(board, myPosition, pieceColor);
+        return Collections.emptyList();
     }
 }
