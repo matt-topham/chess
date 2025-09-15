@@ -62,7 +62,7 @@ public class ChessBoard {
                 ChessPiece a = this.squares[r][c];
                 ChessPiece b = other.squares[r][c];
 
-                if (a == b) continue;           // same ref or both null
+                if (a == b) continue;
                 if (a == null || b == null) return false;
 
                 if (a.getTeamColor() != b.getTeamColor()
@@ -82,7 +82,6 @@ public class ChessBoard {
                 ChessPiece p = squares[r][c];
                 int cell = 0;
                 if (p != null) {
-                    // enum hashes are stable; combine team+type
                     cell = 31 * p.getTeamColor().hashCode() + p.getPieceType().hashCode();
                 }
                 h = 31 * h + cell;

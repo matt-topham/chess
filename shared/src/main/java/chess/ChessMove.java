@@ -53,7 +53,6 @@ public class ChessMove {
         if (this == o) return true;
         if (!(o instanceof ChessMove)) return false;
         ChessMove other = (ChessMove) o;
-        // promotionPiece can be null — handle safely
         boolean promoEqual = (this.promotionPiece == other.promotionPiece);
         return this.startPosition.equals(other.startPosition)
                 && this.endPosition.equals(other.endPosition)
@@ -64,7 +63,6 @@ public class ChessMove {
     public int hashCode() {
         int result = startPosition.hashCode();
         result = 31 * result + endPosition.hashCode();
-        // Enums are fine to hash directly; null-safe:
         result = 31 * result + (promotionPiece == null ? 0 : promotionPiece.hashCode());
         return result;
     }

@@ -89,9 +89,6 @@ public class ChessPiece {
         else if (piece.getPieceType() == PieceType.PAWN) {
             return pawn.getPawnMoves(board, myPosition, pieceColor);
         }
-        /**
-         * come back to this
-         */
         return Collections.emptyList();
     }
 }

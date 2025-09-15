@@ -12,8 +12,7 @@ public class knight {
     public static Collection<ChessMove> getKnightMoves(ChessBoard board,
                                                      ChessPosition start,
                                                      ChessGame.TeamColor color) {
-        // sliding piece → pass true
         Set<ChessMove> moves = pieceMover.getLegalMove(board, start, color, DIRECTIONS, false);
-        return moves; // or return as Set<ChessMove> if you prefer
+        return moves;
     }
 }
