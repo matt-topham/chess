@@ -6,14 +6,14 @@ import java.util.Set;
 
 public class knight {
     private static final int[][] DIRECTIONS = {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+            {2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}
     };
 
     public static Collection<ChessMove> getKnightMoves(ChessBoard board,
                                                      ChessPosition start,
                                                      ChessGame.TeamColor color) {
         // sliding piece → pass true
-        Set<ChessMove> moves = pieceMover.getLegalMove(board, start, color, DIRECTIONS, true);
+        Set<ChessMove> moves = pieceMover.getLegalMove(board, start, color, DIRECTIONS, false);
         return moves; // or return as Set<ChessMove> if you prefer
     }
 }
