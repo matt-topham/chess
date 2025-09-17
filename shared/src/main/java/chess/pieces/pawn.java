@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Collection;
 
+//pawn does not use the pieceMover helper directly. Due to more complex movements it helps itself move while using
+// one of the helper functions of pieceMover
+
 public class pawn {
 
     public static Collection<ChessMove> getPawnMoves(ChessBoard board,
@@ -15,25 +18,46 @@ public class pawn {
         int r = start.getRow();
         int c = start.getColumn();
 
-        int dir = (color == ChessGame.TeamColor.WHITE) ? 1 : -1;
-        int startRank = (color == ChessGame.TeamColor.WHITE) ? 2 : 7;
-        int promoRank = (color == ChessGame.TeamColor.WHITE) ? 8 : 1;
+        //dir based on color will move the piece up or down the board
+        int dir;
+        if (color == ChessGame.TeamColor.WHITE){
+            dir = 1;
+        }
+        else {
+            dir = -1;
+        }
+        //start and promo Rank are similarly bases off of color
+        int startRank;
+        if (color == ChessGame.TeamColor.WHITE) {
+            startRank = 2;
+        }
+        else {
+            startRank = 7;
+        }
+        int promoRank;
+        if (color == ChessGame.TeamColor.WHITE) {
+            promoRank = 8;
+        }
+        else {
+            promoRank = 1;
+        }
 
-        ChessPosition one = pos(r + dir, c);
-        if (inBounds(one) && board.getPiece(one) == null) {
+        //checks to see if the square directly in front is clear
+        ChessPosition one = pos(r + dir, c); // r+dir moves it up or down
+        if (pieceMover.isInside(one.getRow(), one.getColumn()) && board.getPiece(one) == null){
             addMoveOrPromotion(moves, start, one, promoRank);
-
+            // if the piece mover is on the starting rank it will check the second square in front of it
             if (r == startRank) {
                 ChessPosition two = pos(r + 2 * dir, c);
-                if (inBounds(two) && board.getPiece(two) == null) {
+                if (pieceMover.isInside(two.getRow(), two.getColumn()) && board.getPiece(two) == null) {
                     moves.add(new ChessMove(start, two, null));
                 }
             }
         }
-
+        // this will check the diagonal positions to see if there is a piece that can be captured or not
         for (int dc : new int[]{-1, 1}) {
             ChessPosition diag = pos(r + dir, c + dc);
-            if (!inBounds(diag)) continue;
+            if (!pieceMover.isInside(diag.getRow(), diag.getColumn())) continue;
             ChessPiece target = board.getPiece(diag);
             if (target != null && target.getTeamColor() != color) {
                 addMoveOrPromotion(moves, start, diag, promoRank);
@@ -44,15 +68,12 @@ public class pawn {
     }
 
     // --- helpers ---
+    //helps with the checkers
     private static ChessPosition pos(int row, int col) {
         return new ChessPosition(row, col);
     }
 
-    private static boolean inBounds(ChessPosition p) {
-        int row = p.getRow(), col = p.getColumn();
-        return row >= 1 && row <= 8 && col >= 1 && col <= 8;
-    }
-
+    // main moving function for the pawn
     private static void addMoveOrPromotion(Set<ChessMove> moves,
                                            ChessPosition from,
                                            ChessPosition to,
