@@ -57,44 +57,17 @@ public class ChessBoard {
         }
     }
 
-    // override equals
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessBoard other)) return false;
-
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                ChessPiece a = this.squares[r][c];
-                ChessPiece b = other.squares[r][c];
-
-                if (a == b) continue;
-                if (a == null || b == null) return false;
-
-                if (a.getTeamColor() != b.getTeamColor()
-                        || a.getPieceType() != b.getPieceType()) {
-                    return false;
-                }
-            }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
         }
-        return true;
+        ChessBoard that = (ChessBoard) o;
+        return Objects.deepEquals(squares, that.squares);
     }
 
-    // override hashcode
     @Override
     public int hashCode() {
-        int h = 1;
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                ChessPiece p = squares[r][c];
-                int cell = 0;
-                if (p != null) {
-                    cell = 31 * p.getTeamColor().hashCode() + p.getPieceType().hashCode();
-                }
-                h = 31 * h + cell;
-            }
-        }
-        return h;
+        return Arrays.deepHashCode(squares);
     }
-
 }
