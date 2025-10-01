@@ -10,14 +10,16 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    private TeamColor teamTurn = TeamColor.WHITE;
+    private TeamColor teamTurn;
     private ChessBoard board;
-    private boolean gameOver = false;
+    private boolean gameOver;
 
 
     public ChessGame() {
         this.board = new ChessBoard();
         this.board.resetBoard();
+        this.teamTurn = TeamColor.WHITE;
+        this.gameOver = false;
 
     }
 
@@ -103,7 +105,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board = board;
     }
 
     /**
@@ -112,6 +114,32 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return board;
+    }
+
+    private TeamColor opponent(TeamColor color) {
+        if (color == TeamColor.WHITE) {
+            return TeamColor.BLACK;
+        }
+        else {
+            return TeamColor.WHITE;
+        }
+    }
+
+    private ChessBoard copyBoard() {
+        ChessBoard copy = new ChessBoard();
+        for (int r = 1; r <= 8; r++) {
+            for (int c = 1; c <= 8; c++) {
+                ChessPosition p = new ChessPosition(r, c);
+                ChessPiece piece = board.getPiece(p);
+                if (piece != null) {
+                    copy.addPiece(p, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
+                }
+                else {
+                    copy.addPiece(p, null);
+                }
+            }
+        }
+        return copy;
     }
 }
