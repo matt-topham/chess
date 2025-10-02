@@ -13,16 +13,14 @@ import java.util.Objects;
  */
 public class ChessGame {
 
-    private TeamColor teamTurn;
+    private TeamColor teamTurn = TeamColor.WHITE;
     private ChessBoard board;
-    private boolean gameOver;
+    private boolean gameOver = false;
 
 
     public ChessGame() {
         this.board = new ChessBoard();
         this.board.resetBoard();
-        this.teamTurn = TeamColor.WHITE;
-        this.gameOver = false;
 
     }
 
@@ -85,24 +83,36 @@ public class ChessGame {
         ChessPosition from = move.getStartPosition();
         ChessPiece mover = board.getPiece(from);
 
+
         if (mover == null) {
             throw new InvalidMoveException("No piece at: " + from);
         }
-        if (mover.getTeamColor() != teamTurn) {
+
+        ChessGame.TeamColor color = mover.getTeamColor();
+
+        if (color != teamTurn) {
             throw new InvalidMoveException("It is " + teamTurn + "'s turn");
         }
 
         Collection<ChessMove> legalMoves = validMoves(from);
+
         if (legalMoves == null || !legalMoves.contains(move)) {
             throw new InvalidMoveException("Illegal move: " + move);
         }
 
-        ChessPiece.PieceType finalType = (move.getPromotionPiece() != null)
-                ? move.getPromotionPiece()
-                : mover.getPieceType();
+        ChessPiece.PieceType finalType;
+
+        if (move.getPromotionPiece() != null) {
+            finalType = move.getPromotionPiece();
+        }
+
+        else {
+            finalType = mover.getPieceType();
+        }
 
         board.addPiece(from, null);
         board.addPiece(move.getEndPosition(), new ChessPiece(mover.getTeamColor(), finalType));
+
 
 
         teamTurn = opponent(teamTurn);
@@ -199,13 +209,13 @@ public class ChessGame {
         ChessBoard copy = new ChessBoard();
         for (int r = 1; r <= 8; r++) {
             for (int c = 1; c <= 8; c++) {
-                ChessPosition p = new ChessPosition(r, c);
-                ChessPiece piece = board.getPiece(p);
+                ChessPosition pos = new ChessPosition(r, c);
+                ChessPiece piece = board.getPiece(pos);
                 if (piece != null) {
-                    copy.addPiece(p, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
+                    copy.addPiece(pos, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
                 }
                 else {
-                    copy.addPiece(p, null);
+                    copy.addPiece(pos, null);
                 }
             }
         }
@@ -232,16 +242,27 @@ public class ChessGame {
     private boolean safeMove(ChessPosition from, ChessPiece mover, ChessMove move) {
         ChessBoard sim = copyBoard();
 
-        ChessPiece.PieceType finalType = (move.getPromotionPiece() != null)
-                ? move.getPromotionPiece()
-                : mover.getPieceType();
+
+        ChessPiece.PieceType promotion = move.getPromotionPiece();
+        ChessPiece.PieceType finalType;
+
+        if (promotion != null) {
+            finalType = promotion;
+        }
+
+        else {
+            finalType = mover.getPieceType();
+        }
+
 
         sim.addPiece(from, null);
-        sim.addPiece(move.getEndPosition(), new ChessPiece(mover.getTeamColor(), finalType));
+        ChessPiece newPiece = new ChessPiece(mover.getTeamColor(), finalType);
+        sim.addPiece(move.getEndPosition(), newPiece);
 
-        ChessGame test = new ChessGame();
-        test.setBoard(sim);
-        return !test.isInCheck(mover.getTeamColor());
+
+        ChessGame checkGame = new ChessGame();
+        checkGame.setBoard(sim);
+        return !checkGame.isInCheck(mover.getTeamColor());
 
     }
 
