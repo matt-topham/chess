@@ -5,7 +5,7 @@ import chess.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class pieceMover {
+public class PieceMover {
     public static Set<ChessMove> getLegalMove(ChessBoard board,
                                                      ChessPosition start,
                                                      ChessGame.TeamColor color,

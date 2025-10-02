@@ -2,7 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+
 import chess.pieces.*;
 
 /**
@@ -48,8 +48,12 @@ public class ChessPiece {
     }
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChessPiece other)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessPiece other)) {
+            return false;
+        }
         return pieceColor == other.pieceColor && type == other.type;
     }
 
@@ -72,22 +76,22 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
         if (piece.getPieceType() == PieceType.BISHOP) {
-            return bishop.getBishopMoves(board, myPosition, pieceColor);
+            return Bishop.getBishopMoves(board, myPosition, pieceColor);
         }
         else if (piece.getPieceType() == PieceType.QUEEN) {
-            return queen.getQueenMoves(board, myPosition, pieceColor);
+            return Queen.getQueenMoves(board, myPosition, pieceColor);
         }
         else if (piece.getPieceType() == PieceType.KING) {
-            return king.getKingMoves(board, myPosition, pieceColor);
+            return King.getKingMoves(board, myPosition, pieceColor);
         }
         else if (piece.getPieceType() == PieceType.ROOK) {
-            return rook.getRookMoves(board, myPosition, pieceColor);
+            return Rook.getRookMoves(board, myPosition, pieceColor);
         }
         else if (piece.getPieceType() == PieceType.KNIGHT) {
-            return knight.getKnightMoves(board, myPosition, pieceColor);
+            return Knight.getKnightMoves(board, myPosition, pieceColor);
         }
         else if (piece.getPieceType() == PieceType.PAWN) {
-            return pawn.getPawnMoves(board, myPosition, pieceColor);
+            return Pawn.getPawnMoves(board, myPosition, pieceColor);
         }
         return Collections.emptyList();
     }

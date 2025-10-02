@@ -4,7 +4,7 @@ import chess.*;
 import java.util.Collection;
 import java.util.Set;
 
-public class rook {
+public class Rook {
     //the four directions that a rook can move
     private static final int[][] DIRECTIONS = {
             {1, 0}, {-1, 0}, {0, 1}, {0, -1}
@@ -14,7 +14,7 @@ public class rook {
                                                       ChessPosition start,
                                                       ChessGame.TeamColor color) {
         //use the helper function pieceMover.getLegalMove to help here
-        Set<ChessMove> moves = pieceMover.getLegalMove(board, start, color, DIRECTIONS, true);
+        Set<ChessMove> moves = PieceMover.getLegalMove(board, start, color, DIRECTIONS, true);
         return moves;
     }
 }
